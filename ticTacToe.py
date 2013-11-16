@@ -1,4 +1,5 @@
 import agents as agentFunctions
+import sys, os
 import consts
 consts.UNOWNED = -1
 consts.X_OWNED = 0
@@ -163,8 +164,13 @@ def getValidMove(board, turn, error=None):
     
     return move
 
-def game(xagent, oagent):
+def game(xagent, oagent, show=True):
     """This is the min game function"""
+    #hacky solution to not printing
+    if not show:
+        oldstdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+    
     #x goes first, so x will be player 0
     turn = 0
     #initialize the game board
@@ -191,9 +197,18 @@ def game(xagent, oagent):
     drawBoard(board)
     if winner(board) == consts.UNOWNED:
         print "Cats game!"
+        w = consts.UNOWNED
     else:
         print "Congratulations %s wins at %s" % (consts.TURN_MAP[board[winner(board)[0]]], winner(board))
-    return winner(board)
+        w = consts.TURN_MAP[board[winner(board)[0]]]
+
+    #hopefully this repairs the out stream
+    if not show:
+        sys.stdout.close()
+        sys.stdout = oldstdout
+        
+    #return the winner
+    return w
             
 
 #starts the game if this file is executed
