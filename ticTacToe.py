@@ -1,3 +1,4 @@
+import agents as agentFunctions
 import consts
 consts.UNOWNED = -1
 consts.X_OWNED = 0
@@ -28,6 +29,9 @@ consts.O_GRAPHIC = """
             
             
 """
+
+#agents for x and 0 are in 0 and 1 respectivly
+agents = [None,None]
 
 def portionOfRow(col, subRow, value):
     """Draws part of a row for a given column"""
@@ -125,7 +129,11 @@ def getValidMove(board, turn, error=None):
         print error
         
     #get user input
-    move = gamePrompt(turn)
+    if agents[turn] == "Human":
+        move = gamePrompt(turn)
+    else:
+        print("\nAgent for %s is moving.\n" % consts.TURN_MAP[turn])
+        move = agents[turn](board, turn)
     
     #show help and ask for move again
     if move == "?":
@@ -147,12 +155,15 @@ def getValidMove(board, turn, error=None):
     
     return move
 
-def game():
+def game(xagent, oagent):
     """This is the min game function"""
     #x goes first, so x will be player 0
     turn = 0
     #initialize the game board
     board = [consts.UNOWNED] * 9
+    #set agents
+    agents[0] = xagent
+    agents[1] = oagent
 
     #repeat as long as there is no winner
     while (winner(board) == None):
@@ -175,6 +186,5 @@ def game():
 
 #starts the game if this file is executed
 if __name__ == '__main__':
-    game()
-
+    game("Human", agentFunctions.stoogeAgent)
 
