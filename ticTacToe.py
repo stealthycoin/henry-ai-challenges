@@ -87,6 +87,14 @@ def winner(board):
         if winner != None and winner != consts.UNOWNED:
             return layout
 
+    #no winner, check if board is full, if so it is a cat's game
+    count = 0
+    for x in board:
+        if x != consts.UNOWNED:
+            count += 1
+    if count == 9:
+        return consts.UNOWNED #cats game
+
     return None
 
 def gamePrompt(turn):
@@ -181,7 +189,11 @@ def game(xagent, oagent):
 
     #draw the board a lst time and announce the winner
     drawBoard(board)
-    print "Congratulations %s wins at %s" % (consts.TURN_MAP[board[winner(board)[0]]], winner(board))
+    if winner(board) == consts.UNOWNED:
+        print "Cats game!"
+    else:
+        print "Congratulations %s wins at %s" % (consts.TURN_MAP[board[winner(board)[0]]], winner(board))
+    return winner(board)
             
 
 #starts the game if this file is executed
