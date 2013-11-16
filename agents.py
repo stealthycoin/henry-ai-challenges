@@ -18,9 +18,13 @@ import random
 import consts
 
 def stoogeAgent(board, player):
-    move = random.randint(0,8)
-    
-    while board[move] != consts.UNOWNED:
-        move = random.randint(0,8)
+    """This agent plays randomly"""
 
-    return move
+    #collect open squares
+    possibleMoves = []
+    for x in range(len(board)):
+        if board[x] == consts.UNOWNED:
+            possibleMoves.append(x)        
+    
+    #randomly choose open square
+    return possibleMoves[random.randint(0,len(possibleMoves)-1)]
